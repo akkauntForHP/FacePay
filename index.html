@@ -42,28 +42,56 @@
     </script>
     
     <style>
+        /* ===== DARK MODE (default) ===== */
         body {
-            background-color: #0f172a; /* slate-900 */
+            background-color: #0f172a;
             color: #f8fafc;
             overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
+        /* ===== LIGHT MODE ===== */
+        html:not(.dark) body {
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+        html:not(.dark) .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(148, 163, 184, 0.3);
+        }
+        html:not(.dark) .glass-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(20, 184, 166, 0.4);
+        }
+        html:not(.dark) nav.glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(148, 163, 184, 0.2);
+        }
+        html:not(.dark) footer {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        html:not(.dark) .glow-blob { opacity: 0.15; }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0b1120; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        html:not(.dark) ::-webkit-scrollbar-track { background: #e2e8f0; }
+        html:not(.dark) ::-webkit-scrollbar-thumb { background: #94a3b8; }
 
         /* Glassmorphism utilities */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.4); /* slate-800 with opacity */
+            background: rgba(30, 41, 59, 0.4);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: background 0.4s ease, border-color 0.4s ease;
         }
         .glass-card:hover {
             background: rgba(30, 41, 59, 0.6);
-            border-color: rgba(45, 212, 191, 0.3); /* teal border on hover */
+            border-color: rgba(45, 212, 191, 0.3);
             transform: translateY(-2px);
             transition: all 0.3s ease;
         }
@@ -75,6 +103,7 @@
             z-index: -1;
             pointer-events: none;
             opacity: 0.4;
+            transition: opacity 0.4s ease;
         }
         
         /* Nav Links */
@@ -111,6 +140,121 @@
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Language Switcher */
+        .lang-btn {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .lang-btn.active-lang {
+            background: rgba(20, 184, 166, 0.2);
+            border-color: rgba(20, 184, 166, 0.5);
+            color: #2dd4bf;
+        }
+        .lang-btn:not(.active-lang) {
+            color: #94a3b8;
+        }
+        .lang-btn:not(.active-lang):hover {
+            color: #e2e8f0;
+            background: rgba(71, 85, 105, 0.3);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 48px;
+            height: 26px;
+            border-radius: 13px;
+            background: #334155;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: 1px solid #475569;
+        }
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            background: #f59e0b;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+        }
+        .dark .theme-toggle::after {
+            transform: translateX(22px);
+            background: #818cf8;
+            box-shadow: 0 0 6px rgba(129, 140, 248, 0.4);
+        }
+        html:not(.dark) .theme-toggle {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        /* Video thumbnail */
+        .video-thumbnail {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+        .video-thumbnail:hover img {
+            transform: scale(1.03);
+            filter: brightness(0.7);
+        }
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(20, 184, 166, 0.85);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(20, 184, 166, 0.5);
+            transition: all 0.3s ease;
+        }
+        .video-thumbnail:hover .video-play-btn {
+            transform: translate(-50%, -50%) scale(1.15);
+            box-shadow: 0 0 50px rgba(20, 184, 166, 0.7);
+        }
+        .video-play-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+            margin-left: 4px;
+        }
+
+        /* Light mode text helpers */
+        html:not(.dark) .text-white { color: #1e293b !important; }
+        html:not(.dark) .text-slate-300 { color: #475569 !important; }
+        html:not(.dark) .text-slate-400 { color: #64748b !important; }
+        html:not(.dark) .text-slate-500 { color: #94a3b8 !important; }
+        html:not(.dark) .bg-slate-800\/40 { background: rgba(241, 245, 249, 0.6) !important; }
+        html:not(.dark) .bg-slate-800 { background: #e2e8f0 !important; }
+        html:not(.dark) .bg-slate-800\/50 { background: rgba(226, 232, 240, 0.5) !important; }
+        html:not(.dark) .bg-slate-800\/60 { background: rgba(226, 232, 240, 0.6) !important; }
+        html:not(.dark) .bg-slate-700 { background: #cbd5e1 !important; }
+        html:not(.dark) .bg-slate-900 { background: #f1f5f9 !important; }
+        html:not(.dark) .border-slate-700 { border-color: #cbd5e1 !important; }
+        html:not(.dark) .border-slate-800 { border-color: #e2e8f0 !important; }
+        html:not(.dark) .border-slate-700\/50 { border-color: rgba(203, 213, 225, 0.5) !important; }
+        html:not(.dark) .border-slate-800\/60 { border-color: rgba(226, 232, 240, 0.6) !important; }
     </style>
 </head>
 <body class="antialiased selection:bg-teal-500/30 selection:text-white">
@@ -131,18 +275,38 @@
                     <span class="font-bold text-2xl tracking-tight text-white ml-1">FacePay <span class="text-teal-400">Retail</span></span>
                 </div>
                 <div class="flex gap-6 items-center hidden md:flex">
-                    <button onclick="switchTab('landing')" id="nav-landing" class="nav-link active font-medium text-slate-300 hover:text-white">Asosiy</button>
-                    <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('muammo-yechim').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white">Muammo/Yechim</button>
-                    <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('texnologiyalar').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white">Texnologiyalar</button>
+                    <button onclick="switchTab('landing')" id="nav-landing" class="nav-link active font-medium text-slate-300 hover:text-white" data-i18n="nav_home">Asosiy</button>
+                    <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('muammo-yechim').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white" data-i18n="nav_problem">Muammo/Yechim</button>
+                    <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('texnologiyalar').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white" data-i18n="nav_tech">Texnologiyalar</button>
                     <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('roadmap').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white">Roadmap</button>
-                    <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('jamoa').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white">Jamoa</button>
+                    <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('jamoa').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white" data-i18n="nav_team">Jamoa</button>
                     <button onclick="switchTab('landing'); setTimeout(()=>document.getElementById('faq').scrollIntoView(), 100);" class="nav-link font-medium text-slate-300 hover:text-white">FAQ</button>
                     <button onclick="switchTab('demo')" id="nav-demo" class="ml-2 px-4 py-2 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-400 hover:bg-teal-500 hover:text-slate-900 font-semibold transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(20,184,166,0.1)] hover:shadow-[0_0_20px_rgba(20,184,166,0.3)] text-sm">
                         <i data-lucide="play-circle" class="w-4 h-4"></i> Demo View
                     </button>
+
+                    <!-- Separator -->
+                    <div class="w-px h-6 bg-slate-700 mx-1"></div>
+
+                    <!-- Language Switcher -->
+                    <div class="flex items-center gap-1" id="lang-switcher">
+                        <button class="lang-btn active-lang" onclick="setLang('uz')">UZ</button>
+                        <button class="lang-btn" onclick="setLang('ru')">RU</button>
+                        <button class="lang-btn" onclick="setLang('en')">EN</button>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle" onclick="toggleTheme()" title="Dark / Light mode"></div>
                 </div>
-                <!-- Mobile menu button (visual only for simplicity) -->
-                <div class="md:hidden">
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <!-- Mobile lang -->
+                    <div class="flex items-center gap-1" id="lang-switcher-mobile">
+                        <button class="lang-btn active-lang" onclick="setLang('uz')">UZ</button>
+                        <button class="lang-btn" onclick="setLang('ru')">RU</button>
+                        <button class="lang-btn" onclick="setLang('en')">EN</button>
+                    </div>
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
                     <button class="text-slate-300" onclick="switchTab('demo')">
                         <i data-lucide="play-circle" class="w-6 h-6 text-teal-400"></i>
                     </button>
@@ -161,27 +325,27 @@
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
                 </span>
-                <span class="font-medium">Smart Biometric Checkout Engine</span>
+                <span class="font-medium" data-i18n="hero_badge">Smart Biometric Checkout Engine</span>
             </div>
             
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 text-white leading-tight">
                 FacePay Retail &mdash;<br>
-                <span class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 text-3xl md:text-5xl lg:text-6xl">
+                <span class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 text-3xl md:text-5xl lg:text-6xl" data-i18n-html="hero_subtitle">
                     Do'konda  
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">yuz orqali</span><span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400"></span> to'lov qilish tizimi
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">yuz orqali</span> to'lov qilish tizimi
                 </span>
             </h1>
             
-            <p class="text-lg md:text-xl text-slate-400 max-w-3xl mb-10 leading-relaxed">
+            <p class="text-lg md:text-xl text-slate-400 max-w-3xl mb-10 leading-relaxed" data-i18n-html="hero_desc">
                 Plastik karta, naqd pul va telefonsiz &mdash; shunchaki <strong class="text-white">0.5 soniyada</strong> yuzingiz orqali xaridlarni amalga oshiring.
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16 w-full sm:w-auto">
                 <button onclick="switchTab('demo')" class="px-8 py-4 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-bold text-lg transition-all shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(20,184,166,0.6)] hover:scale-105 flex items-center justify-center gap-2">
-                    <i data-lucide="zap" class="w-5 h-5"></i> Prototipni sinab ko'rish
+                    <i data-lucide="zap" class="w-5 h-5"></i> <span data-i18n="hero_btn_try">Prototipni sinab ko'rish</span>
                 </button>
                 <button onclick="document.getElementById('roadmap').scrollIntoView()" class="px-8 py-4 rounded-xl glass-panel hover:bg-slate-800 text-white font-medium text-lg transition-all border border-slate-700 hover:border-slate-600 flex items-center justify-center gap-2">
-                    <i data-lucide="map" class="w-5 h-5 text-slate-400"></i> Yo'l xaritasi (Roadmap)
+                    <i data-lucide="map" class="w-5 h-5 text-slate-400"></i> <span data-i18n="hero_btn_roadmap">Yo'l xaritasi (Roadmap)</span>
                 </button>
             </div>
             
@@ -189,15 +353,15 @@
             <div class="flex flex-wrap justify-center gap-4 md:gap-8 border-t border-slate-800/60 pt-10 mt-4 w-full max-w-4xl">
                 <div class="flex items-center gap-2 text-slate-300">
                     <div class="bg-blue-500/10 p-2 rounded-lg border border-blue-500/20"><i data-lucide="fingerprint" class="text-blue-400 w-5 h-5"></i></div>
-                    <span class="font-medium text-sm md:text-base">OneID va POS tizimi Integratsiyasi</span>
+                    <span class="font-medium text-sm md:text-base" data-i18n="badge_oneid">OneID va POS tizimi Integratsiyasi</span>
                 </div>
                 <div class="flex items-center gap-2 text-slate-300">
                     <div class="bg-yellow-500/10 p-2 rounded-lg border border-yellow-500/20"><i data-lucide="timer" class="text-yellow-400 w-5 h-5"></i></div>
-                    <span class="font-medium text-sm md:text-base">0.5 soniyalik tekshiruv jarayon</span>
+                    <span class="font-medium text-sm md:text-base" data-i18n="badge_speed">0.5 soniyalik tekshiruv jarayon</span>
                 </div>
                 <div class="flex items-center gap-2 text-slate-300">
                     <div class="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20"><i data-lucide="shield-check" class="text-emerald-400 w-5 h-5"></i></div>
-                    <span class="font-medium text-sm md:text-base">Anti-spoofing himoyasi</span>
+                    <span class="font-medium text-sm md:text-base" data-i18n="badge_security">Anti-spoofing himoyasi</span>
                 </div>
             </div>
         </section>
@@ -205,8 +369,8 @@
         <!-- Section 2: Muammo vs Yechim -->
         <section id="muammo-yechim" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pt-28 relative">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Muammo va <span class="text-teal-400">FacePay Yechimi</span></h2>
-                <p class="text-slate-400 max-w-2xl mx-auto">An'anaviy to'lov tizimlaridagi kamchiliklarni biometrik texnologiyalar yordamida qanday hal qilamiz.</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-i18n-html="section_problem_title">Muammo va <span class="text-teal-400">FacePay Yechimi</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto" data-i18n="section_problem_desc">An'anaviy to'lov tizimlaridagi kamchiliklarni biometrik texnologiyalar yordamida qanday hal qilamiz.</p>
             </div>
             
             <div class="grid lg:grid-cols-2 gap-12 relative">
@@ -218,15 +382,15 @@
                 <!-- Problems List -->
                 <div class="space-y-6 lg:pr-6">
                     <h3 class="text-xl font-bold text-red-400 flex items-center gap-2 mb-6 border-b border-red-500/20 pb-4">
-                        <i data-lucide="alert-triangle"></i> Muammolar
+                        <i data-lucide="alert-triangle"></i> <span data-i18n="problems_title">Muammolar</span>
                     </h3>
                     
                     <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500/60 hover:bg-slate-800/60 transition-colors">
                         <div class="flex gap-4">
                             <div class="bg-red-500/10 p-3 rounded-xl h-fit text-red-400 shadow-inner"><i data-lucide="hourglass"></i></div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 text-white">Navbatlar va Sekinlik</h4>
-                                <p class="text-slate-400 text-sm leading-relaxed">Kassalarda kartani izlash, pin-kod kiritish, terminal xatolari va uzun navbatlar tufayli asabbuzarlik hamda qimmatli vaqtning yo'qotilishi.</p>
+                                <h4 class="font-bold text-lg mb-2 text-white" data-i18n="problem1_title">Navbatlar va Sekinlik</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed" data-i18n="problem1_desc">Kassalarda kartani izlash, pin-kod kiritish, terminal xatolari va uzun navbatlar tufayli asabbuzarlik hamda qimmatli vaqtning yo'qotilishi.</p>
                             </div>
                         </div>
                     </div>
@@ -235,8 +399,8 @@
                         <div class="flex gap-4">
                             <div class="bg-red-500/10 p-3 rounded-xl h-fit text-red-400 shadow-inner"><i data-lucide="glasses"></i></div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 text-white">Rekvizitlar Sizishi</h4>
-                                <p class="text-slate-400 text-sm leading-relaxed">Meta Smart Glasses kabi aqlli ko'zoynaklar va yashirin kameralar orqali karta raqami (16 talik) hamda amal qilish muddatini tasvirga olib o'g'irlash xavfi.</p>
+                                <h4 class="font-bold text-lg mb-2 text-white" data-i18n="problem2_title">Rekvizitlar Sizishi</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed" data-i18n="problem2_desc">Meta Smart Glasses kabi aqlli ko'zoynaklar va yashirin kameralar orqali karta raqami (16 talik) hamda amal qilish muddatini tasvirga olib o'g'irlash xavfi.</p>
                             </div>
                         </div>
                     </div>
@@ -245,8 +409,8 @@
                         <div class="flex gap-4">
                             <div class="bg-red-500/10 p-3 rounded-xl h-fit text-red-400 shadow-inner"><i data-lucide="credit-card-x"></i></div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 text-white">Unutuvchanlik & Shikastlanish</h4>
-                                <p class="text-slate-400 text-sm leading-relaxed">Kartani uyda unutish, mikroshema (chip) yeyilishi yoki eng kerakli to'lov paytida telefon quvvati tugab qolishi holatlari.</p>
+                                <h4 class="font-bold text-lg mb-2 text-white" data-i18n="problem3_title">Unutuvchanlik & Shikastlanish</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed" data-i18n="problem3_desc">Kartani uyda unutish, mikroshema (chip) yeyilishi yoki eng kerakli to'lov paytida telefon quvvati tugab qolishi holatlari.</p>
                             </div>
                         </div>
                     </div>
@@ -255,15 +419,15 @@
                 <!-- Solutions List -->
                 <div class="space-y-6 lg:pl-6 mt-12 lg:mt-0">
                     <h3 class="text-xl font-bold text-teal-400 flex items-center gap-2 mb-6 border-b border-teal-500/20 pb-4">
-                        <i data-lucide="check-circle-2"></i> FacePay yechimlari
+                        <i data-lucide="check-circle-2"></i> <span data-i18n="solutions_title">FacePay yechimlari</span>
                     </h3>
                     
                     <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-teal-500/80 bg-gradient-to-r from-teal-900/10 to-transparent hover:bg-slate-800/80 transition-colors">
                         <div class="flex gap-4">
                             <div class="bg-teal-500/20 p-3 rounded-xl h-fit text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.2)]"><i data-lucide="zap"></i></div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 text-white">0.5s Ultra-fast Payment</h4>
-                                <p class="text-slate-400 text-sm leading-relaxed">Do'kon kassasidagi oddiy va arzon kameraga qarab to'lovni lahzada yakunlash. Tranzaksiya atigi yarim soniyada bajariladi.</p>
+                                <h4 class="font-bold text-lg mb-2 text-white" data-i18n="solution1_title">0.5s Ultra-fast Payment</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed" data-i18n="solution1_desc">Do'kon kassasidagi oddiy va arzon kameraga qarab to'lovni lahzada yakunlash. Tranzaksiya atigi yarim soniyada bajariladi.</p>
                             </div>
                         </div>
                     </div>
@@ -272,8 +436,8 @@
                         <div class="flex gap-4">
                             <div class="bg-teal-500/20 p-3 rounded-xl h-fit text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.2)]"><i data-lucide="lock-keyhole"></i></div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 text-white">OneID va Biometrik Hash</h4>
-                                <p class="text-slate-400 text-sm leading-relaxed">Tizim rasm saqlamaydi! OneID orqali tasdiqlangan matematik vektorlar (hash) shifrlanadi. Bu ma'lumotlarning 100% xavfsizligini ta'minlaydi.</p>
+                                <h4 class="font-bold text-lg mb-2 text-white" data-i18n="solution2_title">OneID va Biometrik Hash</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed" data-i18n="solution2_desc">Tizim rasm saqlamaydi! OneID orqali tasdiqlangan matematik vektorlar (hash) shifrlanadi. Bu ma'lumotlarning 100% xavfsizligini ta'minlaydi.</p>
                             </div>
                         </div>
                     </div>
@@ -282,8 +446,8 @@
                         <div class="flex gap-4">
                             <div class="bg-teal-500/20 p-3 rounded-xl h-fit text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.2)]"><i data-lucide="scan-line"></i></div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 text-white">Nol-karta konsepsiyasi</h4>
-                                <p class="text-slate-400 text-sm leading-relaxed">Hamyonsiz, telefonsiz, qo'shimcha qurilmalarsiz — faqat o'z shaxsingiz (yuzingiz) bilan xarid qilish erkinligi va to'liq avtonomlik.</p>
+                                <h4 class="font-bold text-lg mb-2 text-white" data-i18n="solution3_title">Nol-karta konsepsiyasi</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed" data-i18n="solution3_desc">Hamyonsiz, telefonsiz, qo'shimcha qurilmalarsiz — faqat o'z shaxsingiz (yuzingiz) bilan xarid qilish erkinligi va to'liq avtonomlik.</p>
                             </div>
                         </div>
                     </div>
@@ -298,14 +462,14 @@
                 <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
                 
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4">Texnologiyalar va Ishlash Mexanizmi</h2>
-                    <p class="text-slate-400">Zamonaviy AI va Backend texnologiyalarining uzviy bog'liqligi.</p>
+                    <h2 class="text-3xl font-bold mb-4" data-i18n="tech_title">Texnologiyalar va Ishlash Mexanizmi</h2>
+                    <p class="text-slate-400" data-i18n="tech_desc">Zamonaviy AI va Backend texnologiyalarining uzviy bog'liqligi.</p>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-12 items-center">
                     <!-- Tech Stack -->
                     <div>
-                        <h3 class="text-xl font-semibold mb-6 flex items-center gap-2"><i data-lucide="layers" class="text-teal-400"></i> Arxitektura Steki</h3>
+                        <h3 class="text-xl font-semibold mb-6 flex items-center gap-2"><i data-lucide="layers" class="text-teal-400"></i> <span data-i18n="tech_stack_title">Arxitektura Steki</span></h3>
                         <div class="flex flex-wrap gap-3">
                             <div class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm font-medium flex items-center gap-2"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" class="w-4 h-4"> React / Tailwind</div>
                             <div class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm font-medium flex items-center gap-2"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" class="w-4 h-4"> Python / FastAPI</div>
@@ -322,23 +486,23 @@
                         <div class="space-y-6">
                             <div class="relative pl-12">
                                 <div class="absolute left-0 top-1 w-10 h-10 rounded-full bg-slate-800 border-2 border-teal-500 flex items-center justify-center font-bold text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.3)] z-10">1</div>
-                                <h4 class="text-lg font-bold text-white">User Opt-in & OneID Verification</h4>
-                                <p class="text-slate-400 text-sm mt-1">Foydalanuvchi smartfonda ro'yxatdan o'tib, OneID orqali shaxsini tasdiqlaydi.</p>
+                                <h4 class="text-lg font-bold text-white" data-i18n="step1_title">User Opt-in & OneID Verification</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="step1_desc">Foydalanuvchi smartfonda ro'yxatdan o'tib, OneID orqali shaxsini tasdiqlaydi.</p>
                             </div>
                             <div class="relative pl-12">
                                 <div class="absolute left-0 top-1 w-10 h-10 rounded-full bg-slate-800 border-2 border-teal-500 flex items-center justify-center font-bold text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.3)] z-10">2</div>
-                                <h4 class="text-lg font-bold text-white">Face Vector Embedding</h4>
-                                <p class="text-slate-400 text-sm mt-1">Yuz tasviri shifrlangan matematik vektorlarga (hash) aylantiriladi. Rasm saqlanmaydi.</p>
+                                <h4 class="text-lg font-bold text-white" data-i18n="step2_title">Face Vector Embedding</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="step2_desc">Yuz tasviri shifrlangan matematik vektorlarga (hash) aylantiriladi. Rasm saqlanmaydi.</p>
                             </div>
                             <div class="relative pl-12">
                                 <div class="absolute left-0 top-1 w-10 h-10 rounded-full bg-slate-800 border-2 border-teal-500 flex items-center justify-center font-bold text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.3)] z-10">3</div>
-                                <h4 class="text-lg font-bold text-white">POS / WebCam Integration</h4>
-                                <p class="text-slate-400 text-sm mt-1">B2B SDK moduli do'kon kassasidagi qurilmaga o'rnatiladi. U yuzni vektor bazadan 0.3s da qidiradi.</p>
+                                <h4 class="text-lg font-bold text-white" data-i18n="step3_title">POS / WebCam Integration</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="step3_desc">B2B SDK moduli do'kon kassasidagi qurilmaga o'rnatiladi. U yuzni vektor bazadan 0.3s da qidiradi.</p>
                             </div>
                             <div class="relative pl-12">
                                 <div class="absolute left-0 top-1 w-10 h-10 rounded-full bg-slate-800 border-2 border-teal-500 flex items-center justify-center font-bold text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.3)] z-10">4</div>
-                                <h4 class="text-lg font-bold text-white">Liveness Check & Payment</h4>
-                                <p class="text-slate-400 text-sm mt-1">Jonlilik tekshiruvi (Anti-spoofing) o'tadi va biriktirilgan kartadan to'lov avtomat yechiladi.</p>
+                                <h4 class="text-lg font-bold text-white" data-i18n="step4_title">Liveness Check & Payment</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="step4_desc">Jonlilik tekshiruvi (Anti-spoofing) o'tadi va biriktirilgan kartadan to'lov avtomat yechiladi.</p>
                             </div>
                         </div>
                     </div>
@@ -349,8 +513,8 @@
         <!-- Section 4: Roadmap -->
         <section id="roadmap" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pt-28">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4">Yo'l Xaritasi <span class="text-teal-400">(Roadmap)</span></h2>
-                <p class="text-slate-400">G'oyadan tortib yirik supermarketlar zanjirigacha bo'lgan rejamiz.</p>
+                <h2 class="text-3xl font-bold mb-4" data-i18n-html="roadmap_title">Yo'l Xaritasi <span class="text-teal-400">(Roadmap)</span></h2>
+                <p class="text-slate-400" data-i18n="roadmap_desc">G'oyadan tortib yirik supermarketlar zanjirigacha bo'lgan rejamiz.</p>
             </div>
 
             <div class="space-y-8">
@@ -361,10 +525,10 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-xl font-bold text-white">Phase 1: Idea (Completed)</h3>
-                            <span class="bg-emerald-500/20 text-emerald-400 text-xs px-2 py-1 rounded-full border border-emerald-500/30 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Bajarildi</span>
+                            <h3 class="text-xl font-bold text-white" data-i18n="phase1_title">Phase 1: Idea (Completed)</h3>
+                            <span class="bg-emerald-500/20 text-emerald-400 text-xs px-2 py-1 rounded-full border border-emerald-500/30 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> <span data-i18n="status_done">Bajarildi</span></span>
                         </div>
-                        <p class="text-slate-400">Bozor tahlili, OneID integratsiya arxitekturasi va kiberxavfsizlik (Zero-Knowledge / Hash) konsepsiyasini ishlab chiqish.</p>
+                        <p class="text-slate-400" data-i18n="phase1_desc">Bozor tahlili, OneID integratsiya arxitekturasi va kiberxavfsizlik (Zero-Knowledge / Hash) konsepsiyasini ishlab chiqish.</p>
                     </div>
                 </div>
 
@@ -376,10 +540,10 @@
                     </div>
                     <div class="z-10">
                         <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-xl font-bold text-white">Phase 2: Prototype (In Progress)</h3>
-                            <span class="bg-yellow-400/20 text-yellow-400 text-xs px-2 py-1 rounded-full border border-yellow-400/30 flex items-center gap-1"><i data-lucide="loader" class="w-3 h-3 animate-spin"></i> Jarayonda</span>
+                            <h3 class="text-xl font-bold text-white" data-i18n="phase2_title">Phase 2: Prototype (In Progress)</h3>
+                            <span class="bg-yellow-400/20 text-yellow-400 text-xs px-2 py-1 rounded-full border border-yellow-400/30 flex items-center gap-1"><i data-lucide="loader" class="w-3 h-3 animate-spin"></i> <span data-i18n="status_progress">Jarayonda</span></span>
                         </div>
-                        <p class="text-slate-400">Python/OpenCV dagi Liveness Detection modeli, Streamlit orqali vizual demo va vaqtinchalik vektor ma'lumotlar bazasini sozlash.</p>
+                        <p class="text-slate-400" data-i18n="phase2_desc">Python/OpenCV dagi Liveness Detection modeli, Streamlit orqali vizual demo va vaqtinchalik vektor ma'lumotlar bazasini sozlash.</p>
                     </div>
                 </div>
 
@@ -390,9 +554,9 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-xl font-bold text-slate-300">Phase 3: MVP (Planned)</h3>
+                            <h3 class="text-xl font-bold text-slate-300" data-i18n="phase3_title">Phase 3: MVP (Planned)</h3>
                         </div>
-                        <p class="text-slate-400">Korzinka/Makro kabi chakana savdo kassalari uchun B2B SDK modulini yaratish va amaliy pilot loyihasini real muhitda sinash.</p>
+                        <p class="text-slate-400" data-i18n="phase3_desc">Korzinka/Makro kabi chakana savdo kassalari uchun B2B SDK modulini yaratish va amaliy pilot loyihasini real muhitda sinash.</p>
                     </div>
                 </div>
 
@@ -403,9 +567,9 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-xl font-bold text-slate-300">Phase 4: Launched & Scale</h3>
+                            <h3 class="text-xl font-bold text-slate-300" data-i18n="phase4_title">Phase 4: Launched & Scale</h3>
                         </div>
-                        <p class="text-slate-400">Payme, Click va yirik supermarketlar zanjirida to'liq ommalashtirish. Bank API'lari orqali to'g'ridan-to'g'ri protsessingga ulanish.</p>
+                        <p class="text-slate-400" data-i18n="phase4_desc">Payme, Click va yirik supermarketlar zanjirida to'liq ommalashtirish. Bank API'lari orqali to'g'ridan-to'g'ri protsessingga ulanish.</p>
                     </div>
                 </div>
             </div>
@@ -414,14 +578,14 @@
         <!-- Section 5: Team & Why Us -->
         <section id="jamoa" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pt-28 border-t border-slate-800">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4">Jamoa va <span class="text-teal-400">Nima uchun biz?</span></h2>
-                <p class="text-slate-400">Loyihani amalga oshirish uchun kuchli ekspertiza va tajriba.</p>
+                <h2 class="text-3xl font-bold mb-4" data-i18n-html="team_title">Jamoa va <span class="text-teal-400">Nima uchun biz?</span></h2>
+                <p class="text-slate-400" data-i18n="team_desc">Loyihani amalga oshirish uchun kuchli ekspertiza va tajriba.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-16">
                 <!-- Team Members -->
                 <div>
-                    <h3 class="text-2xl font-semibold mb-8 text-white border-b border-slate-700 pb-2">Jamoamiz</h3>
+                    <h3 class="text-2xl font-semibold mb-8 text-white border-b border-slate-700 pb-2" data-i18n="team_members_title">Jamoamiz</h3>
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Member 1 -->
                         <div class="glass-card p-5 rounded-xl bg-slate-800/40 border border-slate-700 flex flex-col items-center text-center">
@@ -460,27 +624,27 @@
 
                 <!-- Why Us -->
                 <div>
-                    <h3 class="text-2xl font-semibold mb-8 text-white border-b border-slate-700 pb-2">Nega aynan biz?</h3>
+                    <h3 class="text-2xl font-semibold mb-8 text-white border-b border-slate-700 pb-2" data-i18n="why_us_title">Nega aynan biz?</h3>
                     <ul class="space-y-6">
                         <li class="flex gap-4">
                             <div class="mt-1"><i data-lucide="check-circle" class="text-teal-400 w-6 h-6"></i></div>
                             <div>
-                                <h4 class="font-bold text-white text-lg">Real Tajriba</h4>
-                                <p class="text-slate-400 text-sm mt-1">FinTech va Sun'iy Intellekt (AI/CV) sohasida real amaliy loyihalarda ishtirok etgan jamoamiz bor.</p>
+                                <h4 class="font-bold text-white text-lg" data-i18n="why1_title">Real Tajriba</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="why1_desc">FinTech va Sun'iy Intellekt (AI/CV) sohasida real amaliy loyihalarda ishtirok etgan jamoamiz bor.</p>
                             </div>
                         </li>
                         <li class="flex gap-4">
                             <div class="mt-1"><i data-lucide="check-circle" class="text-teal-400 w-6 h-6"></i></div>
                             <div>
-                                <h4 class="font-bold text-white text-lg">Infratuzilmani Tushunish</h4>
-                                <p class="text-slate-400 text-sm mt-1">Mahalliy to'lov tizimlari (Uzcard, Humo) hamda davlat xizmatlari (OneID) API'lari bilan qanday ishlash mexanizmini to'liq bilamiz.</p>
+                                <h4 class="font-bold text-white text-lg" data-i18n="why2_title">Infratuzilmani Tushunish</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="why2_desc">Mahalliy to'lov tizimlari (Uzcard, Humo) hamda davlat xizmatlari (OneID) API'lari bilan qanday ishlash mexanizmini to'liq bilamiz.</p>
                             </div>
                         </li>
                         <li class="flex gap-4">
                             <div class="mt-1"><i data-lucide="check-circle" class="text-teal-400 w-6 h-6"></i></div>
                             <div>
-                                <h4 class="font-bold text-white text-lg">Kompleks Yondashuv</h4>
-                                <p class="text-slate-400 text-sm mt-1">Loyihaning faqat dasturiy (kod) qismini emas, balki kiberxavfsizlik, tijoriy foyda (B2B SaaS) va retail (chakana savdo) modellarini aniq shakllantirganmiz.</p>
+                                <h4 class="font-bold text-white text-lg" data-i18n="why3_title">Kompleks Yondashuv</h4>
+                                <p class="text-slate-400 text-sm mt-1" data-i18n="why3_desc">Loyihaning faqat dasturiy (kod) qismini emas, balki kiberxavfsizlik, tijoriy foyda (B2B SaaS) va retail (chakana savdo) modellarini aniq shakllantirganmiz.</p>
                             </div>
                         </li>
                     </ul>
@@ -491,19 +655,19 @@
         <!-- Section 6: FAQ (Deep Dive) -->
         <section id="faq" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pt-28">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold mb-4">Ko'p Beriladigan Savollar <span class="text-teal-400">(FAQ)</span></h2>
-                <p class="text-slate-400">Tizim xavfsizligi va ishlashi haqida batafsil ma'lumotlar.</p>
+                <h2 class="text-3xl font-bold mb-4" data-i18n-html="faq_title">Ko'p Beriladigan Savollar <span class="text-teal-400">(FAQ)</span></h2>
+                <p class="text-slate-400" data-i18n="faq_desc">Tizim xavfsizligi va ishlashi haqida batafsil ma'lumotlar.</p>
             </div>
 
             <div class="space-y-4">
                 <!-- FAQ Item 1 -->
                 <div class="faq-item glass-panel border border-slate-700 rounded-xl overflow-hidden">
                     <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none hover:bg-slate-800/50 transition-colors" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-lg text-white">1. Yuz qanday va qayerda ro'yxatdan o'tkaziladi?</span>
+                        <span class="font-semibold text-lg text-white" data-i18n="faq1_q">1. Yuz qanday va qayerda ro'yxatdan o'tkaziladi?</span>
                         <i data-lucide="chevron-down" class="text-teal-400 w-5 h-5 transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
                     </button>
                     <div class="faq-content px-6 bg-slate-800/30">
-                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4">
+                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4" data-i18n-html="faq1_a">
                             <strong>Javob:</strong> Do'kon apparatida emas! Foydalanuvchi o'zining shaxsiy smartfonida, Payme/Click yoki supermarketning rasmiy ilovasidan <strong>OneID (MyGov) orqali 1 marta yuzini skanerlaydi.</strong> Bu jarayon mutlaqo maxfiy va xavfsiz uy sharoitida o'tadi.
                         </p>
                     </div>
@@ -512,11 +676,11 @@
                 <!-- FAQ Item 2 -->
                 <div class="faq-item glass-panel border border-slate-700 rounded-xl overflow-hidden">
                     <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none hover:bg-slate-800/50 transition-colors" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-lg text-white">2. OneID va MyGov integratsiyasi nima beradi?</span>
+                        <span class="font-semibold text-lg text-white" data-i18n="faq2_q">2. OneID va MyGov integratsiyasi nima beradi?</span>
                         <i data-lucide="chevron-down" class="text-teal-400 w-5 h-5 transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
                     </button>
                     <div class="faq-content px-6 bg-slate-800/30">
-                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4">
+                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4" data-i18n-html="faq2_a">
                             <strong>Javob:</strong> Yuzning chindan ham pasport egasiga tegishli ekanini davlat darajasida 100% tasdiqlaydi. Bu birovning rasmidan foydalanib o'zga shaxsning kartasini noqonuniy ulab olish xavfini tubdan yo'qotadi.
                         </p>
                     </div>
@@ -525,11 +689,11 @@
                 <!-- FAQ Item 3 -->
                 <div class="faq-item glass-panel border border-slate-700 rounded-xl overflow-hidden">
                     <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none hover:bg-slate-800/50 transition-colors" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-lg text-white">3. Birov mening rasmim yoki videoyimni ko'rsatsa, pul yechib oladimi (Spoofing)?</span>
+                        <span class="font-semibold text-lg text-white" data-i18n="faq3_q">3. Birov mening rasmim yoki videoyimni ko'rsatsa, pul yechib oladimi (Spoofing)?</span>
                         <i data-lucide="chevron-down" class="text-teal-400 w-5 h-5 transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
                     </button>
                     <div class="faq-content px-6 bg-slate-800/30">
-                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4">
+                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4" data-i18n-html="faq3_a">
                             <strong>Javob:</strong> Yo'q! Tizimda qat'iy <strong>Liveness Detection (jonlilikni tekshirish)</strong> algoritmi mavjud. U tasvirning 3D chuqurligini, ko'z qisishini va yuzdagi mikroskopik qon aylanish/tabiiy harakatlarni skanerlaydi. Telefon ekranidagi rasm yoki niqoblarni darhol rad etadi.
                         </p>
                     </div>
@@ -538,11 +702,11 @@
                 <!-- FAQ Item 4 -->
                 <div class="faq-item glass-panel border border-slate-700 rounded-xl overflow-hidden">
                     <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none hover:bg-slate-800/50 transition-colors" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-lg text-white">4. Do'kondagi apparat/kassada mening ma'lumotlarim ko'rinadimi?</span>
+                        <span class="font-semibold text-lg text-white" data-i18n="faq4_q">4. Do'kondagi apparat/kassada mening ma'lumotlarim ko'rinadimi?</span>
                         <i data-lucide="chevron-down" class="text-teal-400 w-5 h-5 transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
                     </button>
                     <div class="faq-content px-6 bg-slate-800/30">
-                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4">
+                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4" data-i18n-html="faq4_a">
                             <strong>Javob:</strong> Yo'q, maxfiylik uchun kassir ekranida na karta raqamingiz, na ismingiz, na balansingiz ko'rinadi. Ekrandagi yagona ma'lumot — "To'lov muvaffaqiyatli o'tdi" degan yashil belgi va chek bo'ladi xolos.
                         </p>
                     </div>
@@ -551,11 +715,11 @@
                 <!-- FAQ Item 5 -->
                 <div class="faq-item glass-panel border border-slate-700 rounded-xl overflow-hidden">
                     <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none hover:bg-slate-800/50 transition-colors" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-lg text-white">5. Chet el tajribasida bu o'zini oqlaganmi?</span>
+                        <span class="font-semibold text-lg text-white" data-i18n="faq5_q">5. Chet el tajribasida bu o'zini oqlaganmi?</span>
                         <i data-lucide="chevron-down" class="text-teal-400 w-5 h-5 transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
                     </button>
                     <div class="faq-content px-6 bg-slate-800/30">
-                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4">
+                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4" data-i18n-html="faq5_a">
                             <strong>Javob:</strong> Ha! Xitoyda Alipay va WeChat Pay "Smile to Pay" tizimlari orqali, shuningdek Rossiyada Sberbank va X5 Group (Pyaterochka/Perekrestok) orqali yuzlab million dollarlik tranzaksiyalar aynan ushbu biometric to'lov tizimi orqali har kuni amalga oshirilmoqda.
                         </p>
                     </div>
@@ -564,11 +728,11 @@
                 <!-- FAQ Item 6 -->
                 <div class="faq-item glass-panel border border-slate-700 rounded-xl overflow-hidden">
                     <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none hover:bg-slate-800/50 transition-colors" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-lg text-white">6. Magazin va supermarketlarga bundan nima foyda?</span>
+                        <span class="font-semibold text-lg text-white" data-i18n="faq6_q">6. Magazin va supermarketlarga bundan nima foyda?</span>
                         <i data-lucide="chevron-down" class="text-teal-400 w-5 h-5 transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
                     </button>
                     <div class="faq-content px-6 bg-slate-800/30">
-                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4">
+                        <p class="text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4" data-i18n-html="faq6_a">
                             <strong>Javob:</strong> Bitta xaridorga xizmat ko'rsatish vaqti qisqarishi hisobiga kassalardagi navbatlar 50% gacha kamayadi. Bu esa o'tkazuvchanlikni oshiradi, ko'proq mijozlarga xizmat ko'rsatish imkonini beradi va do'kon innovatsion, premium imidjga ega bo'ladi.
                         </p>
                     </div>
@@ -586,34 +750,31 @@
                 <button onclick="switchTab('landing')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
-                <h2 class="text-2xl font-bold">FacePay Prototip & Demo</h2>
+                <h2 class="text-2xl font-bold" data-i18n="demo_page_title">FacePay Prototip & Demo</h2>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
                 
                 <!-- Video Container (Left 2 columns) -->
                 <div class="lg:col-span-2 space-y-6">
-                    <div class="glass-panel rounded-2xl overflow-hidden border border-slate-700 aspect-video relative group bg-black flex items-center justify-center">
-                        
-                        <!-- Placeholder for Video Frame -->
-                        <div id="video-frame-container" class="w-full h-full relative z-10">
-                            <!-- Default Youtube Embed (can be changed via admin below) -->
-                            <iframe id="demo-iframe" class="w-full h-full" src="https://drive.google.com/file/d/1DkJwoMiAPpNBtqH87aIYXYIHHgyjM7_O/view?usp=sharing" title="FacePay Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <!-- Clickable Thumbnail instead of iframe -->
+                    <a href="https://drive.google.com/file/d/1DkJwoMiAPpNBtqH87aIYXYIHHgyjM7_O/view?usp=sharing" target="_blank" class="video-thumbnail glass-panel border border-slate-700 aspect-video block relative group">
+                        <img src="images/demo_thumbnail.jpg" alt="FacePay Demo Video" class="w-full h-full object-cover rounded-2xl">
+                        <div class="video-play-btn">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="5,3 19,12 5,21" /></svg>
                         </div>
-
-                        <!-- Fallback / Loading Overlay -->
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 -z-10 text-slate-500">
-                            <i data-lucide="video" class="w-12 h-12 mb-2 opacity-50"></i>
-                            <span>Video kutilmoqda...</span>
+                        <div class="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-4 py-2 rounded-lg border border-slate-600/50 flex items-center gap-2">
+                            <i data-lucide="play" class="w-4 h-4 text-teal-400"></i>
+                            <span class="text-sm text-white font-medium" data-i18n="demo_watch_video">Demo videoni ko'rish</span>
                         </div>
-                    </div>
+                    </a>
 
                     <div class="glass-panel p-6 rounded-2xl border border-slate-700">
-                        <h3 class="text-xl font-bold mb-3 text-white">Demo videoda nima ko'rsatilgan?</h3>
+                        <h3 class="text-xl font-bold mb-3 text-white" data-i18n="demo_what_shown">Demo videoda nima ko'rsatilgan?</h3>
                         <ul class="space-y-3 text-slate-300 text-sm">
-                            <li class="flex gap-3"><i data-lucide="check" class="w-5 h-5 text-teal-400 flex-shrink-0"></i> <span><strong>Real-time yuz aniqlash (Face Detection):</strong> Kamera orqali foydalanuvchining yuzini millisoniyalarda tutib olish jarayoni.</span></li>
-                            <li class="flex gap-3"><i data-lucide="check" class="w-5 h-5 text-teal-400 flex-shrink-0"></i> <span><strong>Liveness tekshiruvi:</strong> Soxta rasm yoki telefon ekranidan ko'rsatilgan videoni farqlay olish qobiliyati.</span></li>
-                            <li class="flex gap-3"><i data-lucide="check" class="w-5 h-5 text-teal-400 flex-shrink-0"></i> <span><strong>POS Simulyatsiyasi:</strong> Do'kon kassasi ekranida "To'lov qabul qilindi" xabarining chiqishi.</span></li>
+                            <li class="flex gap-3"><i data-lucide="check" class="w-5 h-5 text-teal-400 flex-shrink-0"></i> <span data-i18n-html="demo_feature1"><strong>Real-time yuz aniqlash (Face Detection):</strong> Kamera orqali foydalanuvchining yuzini millisoniyalarda tutib olish jarayoni.</span></li>
+                            <li class="flex gap-3"><i data-lucide="check" class="w-5 h-5 text-teal-400 flex-shrink-0"></i> <span data-i18n-html="demo_feature2"><strong>Liveness tekshiruvi:</strong> Soxta rasm yoki telefon ekranidan ko'rsatilgan videoni farqlay olish qobiliyati.</span></li>
+                            <li class="flex gap-3"><i data-lucide="check" class="w-5 h-5 text-teal-400 flex-shrink-0"></i> <span data-i18n-html="demo_feature3"><strong>POS Simulyatsiyasi:</strong> Do'kon kassasi ekranida "To'lov qabul qilindi" xabarining chiqishi.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -623,13 +784,13 @@
                     
                     <!-- Live App Link -->
                     <div class="glass-panel p-6 rounded-2xl border border-slate-700 bg-gradient-to-b from-teal-900/20 to-transparent">
-                        <h3 class="text-lg font-bold mb-2 text-white">Jonli Prototip</h3>
-                        <p class="text-sm text-slate-400 mb-6">Vaqtinchalik web-kamera prototipini brauzerda sinab ko'ring.</p>
+                        <h3 class="text-lg font-bold mb-2 text-white" data-i18n="demo_live_title">Jonli Prototip</h3>
+                        <p class="text-sm text-slate-400 mb-6" data-i18n="demo_live_desc">Vaqtinchalik web-kamera prototipini brauzerda sinab ko'ring.</p>
                         
                         <a href="https://facepay-demo.netlify.app/" target="_blank" class="w-full py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold transition-all shadow-[0_0_15px_rgba(20,184,166,0.2)] flex items-center justify-center gap-2">
-                            <i data-lucide="external-link" class="w-5 h-5"></i> Demo-ga o'tish
+                            <i data-lucide="external-link" class="w-5 h-5"></i> <span data-i18n="demo_go_btn">Demo-ga o'tish</span>
                         </a>
-                        <p class="text-xs text-slate-500 text-center mt-3">*Faqat jamoa a'zolari yoki hakamlar uchun ruxsat etilgan bo'lishi mumkin.</p>
+                        <p class="text-xs text-slate-500 text-center mt-3" data-i18n="demo_note">*Faqat jamoa a'zolari yoki hakamlar uchun ruxsat etilgan bo'lishi mumkin.</p>
                     </div>
 
                 </div>
@@ -653,6 +814,333 @@
 
     <!-- Scripts -->
     <script>
+        // ==================== TRANSLATIONS ====================
+        const translations = {
+            uz: {
+                // Nav
+                nav_home: "Asosiy",
+                nav_problem: "Muammo/Yechim",
+                nav_tech: "Texnologiyalar",
+                nav_team: "Jamoa",
+                // Hero
+                hero_badge: "Smart Biometric Checkout Engine",
+                hero_subtitle: 'Do\'konda <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">yuz orqali</span> to\'lov qilish tizimi',
+                hero_desc: 'Plastik karta, naqd pul va telefonsiz &mdash; shunchaki <strong class="text-white">0.5 soniyada</strong> yuzingiz orqali xaridlarni amalga oshiring.',
+                hero_btn_try: "Prototipni sinab ko'rish",
+                hero_btn_roadmap: "Yo'l xaritasi (Roadmap)",
+                badge_oneid: "OneID va POS tizimi Integratsiyasi",
+                badge_speed: "0.5 soniyalik tekshiruv jarayon",
+                badge_security: "Anti-spoofing himoyasi",
+                // Problems & Solutions
+                section_problem_title: 'Muammo va <span class="text-teal-400">FacePay Yechimi</span>',
+                section_problem_desc: "An'anaviy to'lov tizimlaridagi kamchiliklarni biometrik texnologiyalar yordamida qanday hal qilamiz.",
+                problems_title: "Muammolar",
+                problem1_title: "Navbatlar va Sekinlik",
+                problem1_desc: "Kassalarda kartani izlash, pin-kod kiritish, terminal xatolari va uzun navbatlar tufayli asabbuzarlik hamda qimmatli vaqtning yo'qotilishi.",
+                problem2_title: "Rekvizitlar Sizishi",
+                problem2_desc: "Meta Smart Glasses kabi aqlli ko'zoynaklar va yashirin kameralar orqali karta raqami (16 talik) hamda amal qilish muddatini tasvirga olib o'g'irlash xavfi.",
+                problem3_title: "Unutuvchanlik & Shikastlanish",
+                problem3_desc: "Kartani uyda unutish, mikroshema (chip) yeyilishi yoki eng kerakli to'lov paytida telefon quvvati tugab qolishi holatlari.",
+                solutions_title: "FacePay yechimlari",
+                solution1_title: "0.5s Ultra-fast Payment",
+                solution1_desc: "Do'kon kassasidagi oddiy va arzon kameraga qarab to'lovni lahzada yakunlash. Tranzaksiya atigi yarim soniyada bajariladi.",
+                solution2_title: "OneID va Biometrik Hash",
+                solution2_desc: "Tizim rasm saqlamaydi! OneID orqali tasdiqlangan matematik vektorlar (hash) shifrlanadi. Bu ma'lumotlarning 100% xavfsizligini ta'minlaydi.",
+                solution3_title: "Nol-karta konsepsiyasi",
+                solution3_desc: "Hamyonsiz, telefonsiz, qo'shimcha qurilmalarsiz — faqat o'z shaxsingiz (yuzingiz) bilan xarid qilish erkinligi va to'liq avtonomlik.",
+                // Tech
+                tech_title: "Texnologiyalar va Ishlash Mexanizmi",
+                tech_desc: "Zamonaviy AI va Backend texnologiyalarining uzviy bog'liqligi.",
+                tech_stack_title: "Arxitektura Steki",
+                step1_title: "User Opt-in & OneID Verification",
+                step1_desc: "Foydalanuvchi smartfonda ro'yxatdan o'tib, OneID orqali shaxsini tasdiqlaydi.",
+                step2_title: "Face Vector Embedding",
+                step2_desc: "Yuz tasviri shifrlangan matematik vektorlarga (hash) aylantiriladi. Rasm saqlanmaydi.",
+                step3_title: "POS / WebCam Integration",
+                step3_desc: "B2B SDK moduli do'kon kassasidagi qurilmaga o'rnatiladi. U yuzni vektor bazadan 0.3s da qidiradi.",
+                step4_title: "Liveness Check & Payment",
+                step4_desc: "Jonlilik tekshiruvi (Anti-spoofing) o'tadi va biriktirilgan kartadan to'lov avtomat yechiladi.",
+                // Roadmap
+                roadmap_title: 'Yo\'l Xaritasi <span class="text-teal-400">(Roadmap)</span>',
+                roadmap_desc: "G'oyadan tortib yirik supermarketlar zanjirigacha bo'lgan rejamiz.",
+                phase1_title: "Phase 1: Idea (Completed)",
+                status_done: "Bajarildi",
+                phase1_desc: "Bozor tahlili, OneID integratsiya arxitekturasi va kiberxavfsizlik (Zero-Knowledge / Hash) konsepsiyasini ishlab chiqish.",
+                phase2_title: "Phase 2: Prototype (In Progress)",
+                status_progress: "Jarayonda",
+                phase2_desc: "Python/OpenCV dagi Liveness Detection modeli, Streamlit orqali vizual demo va vaqtinchalik vektor ma'lumotlar bazasini sozlash.",
+                phase3_title: "Phase 3: MVP (Planned)",
+                phase3_desc: "Korzinka/Makro kabi chakana savdo kassalari uchun B2B SDK modulini yaratish va amaliy pilot loyihasini real muhitda sinash.",
+                phase4_title: "Phase 4: Launched & Scale",
+                phase4_desc: "Payme, Click va yirik supermarketlar zanjirida to'liq ommalashtirish. Bank API'lari orqali to'g'ridan-to'g'ri protsessingga ulanish.",
+                // Team
+                team_title: 'Jamoa va <span class="text-teal-400">Nima uchun biz?</span>',
+                team_desc: "Loyihani amalga oshirish uchun kuchli ekspertiza va tajriba.",
+                team_members_title: "Jamoamiz",
+                why_us_title: "Nega aynan biz?",
+                why1_title: "Real Tajriba",
+                why1_desc: "FinTech va Sun'iy Intellekt (AI/CV) sohasida real amaliy loyihalarda ishtirok etgan jamoamiz bor.",
+                why2_title: "Infratuzilmani Tushunish",
+                why2_desc: "Mahalliy to'lov tizimlari (Uzcard, Humo) hamda davlat xizmatlari (OneID) API'lari bilan qanday ishlash mexanizmini to'liq bilamiz.",
+                why3_title: "Kompleks Yondashuv",
+                why3_desc: "Loyihaning faqat dasturiy (kod) qismini emas, balki kiberxavfsizlik, tijoriy foyda (B2B SaaS) va retail (chakana savdo) modellarini aniq shakllantirganmiz.",
+                // FAQ
+                faq_title: 'Ko\'p Beriladigan Savollar <span class="text-teal-400">(FAQ)</span>',
+                faq_desc: "Tizim xavfsizligi va ishlashi haqida batafsil ma'lumotlar.",
+                faq1_q: "1. Yuz qanday va qayerda ro'yxatdan o'tkaziladi?",
+                faq1_a: '<strong>Javob:</strong> Do\'kon apparatida emas! Foydalanuvchi o\'zining shaxsiy smartfonida, Payme/Click yoki supermarketning rasmiy ilovasidan <strong>OneID (MyGov) orqali 1 marta yuzini skanerlaydi.</strong> Bu jarayon mutlaqo maxfiy va xavfsiz uy sharoitida o\'tadi.',
+                faq2_q: "2. OneID va MyGov integratsiyasi nima beradi?",
+                faq2_a: "<strong>Javob:</strong> Yuzning chindan ham pasport egasiga tegishli ekanini davlat darajasida 100% tasdiqlaydi. Bu birovning rasmidan foydalanib o'zga shaxsning kartasini noqonuniy ulab olish xavfini tubdan yo'qotadi.",
+                faq3_q: "3. Birov mening rasmim yoki videoyimni ko'rsatsa, pul yechib oladimi (Spoofing)?",
+                faq3_a: '<strong>Javob:</strong> Yo\'q! Tizimda qat\'iy <strong>Liveness Detection (jonlilikni tekshirish)</strong> algoritmi mavjud. U tasvirning 3D chuqurligini, ko\'z qisishini va yuzdagi mikroskopik qon aylanish/tabiiy harakatlarni skanerlaydi. Telefon ekranidagi rasm yoki niqoblarni darhol rad etadi.',
+                faq4_q: "4. Do'kondagi apparat/kassada mening ma'lumotlarim ko'rinadimi?",
+                faq4_a: '<strong>Javob:</strong> Yo\'q, maxfiylik uchun kassir ekranida na karta raqamingiz, na ismingiz, na balansingiz ko\'rinadi. Ekrandagi yagona ma\'lumot — "To\'lov muvaffaqiyatli o\'tdi" degan yashil belgi va chek bo\'ladi xolos.',
+                faq5_q: "5. Chet el tajribasida bu o'zini oqlaganmi?",
+                faq5_a: '<strong>Javob:</strong> Ha! Xitoyda Alipay va WeChat Pay "Smile to Pay" tizimlari orqali, shuningdek Rossiyada Sberbank va X5 Group (Pyaterochka/Perekrestok) orqali yuzlab million dollarlik tranzaksiyalar aynan ushbu biometric to\'lov tizimi orqali har kuni amalga oshirilmoqda.',
+                faq6_q: "6. Magazin va supermarketlarga bundan nima foyda?",
+                faq6_a: "<strong>Javob:</strong> Bitta xaridorga xizmat ko'rsatish vaqti qisqarishi hisobiga kassalardagi navbatlar 50% gacha kamayadi. Bu esa o'tkazuvchanlikni oshiradi, ko'proq mijozlarga xizmat ko'rsatish imkonini beradi va do'kon innovatsion, premium imidjga ega bo'ladi.",
+                // Demo
+                demo_page_title: "FacePay Prototip & Demo",
+                demo_watch_video: "Demo videoni ko'rish",
+                demo_what_shown: "Demo videoda nima ko'rsatilgan?",
+                demo_feature1: '<strong>Real-time yuz aniqlash (Face Detection):</strong> Kamera orqali foydalanuvchining yuzini millisoniyalarda tutib olish jarayoni.',
+                demo_feature2: '<strong>Liveness tekshiruvi:</strong> Soxta rasm yoki telefon ekranidan ko\'rsatilgan videoni farqlay olish qobiliyati.',
+                demo_feature3: '<strong>POS Simulyatsiyasi:</strong> Do\'kon kassasi ekranida "To\'lov qabul qilindi" xabarining chiqishi.',
+                demo_live_title: "Jonli Prototip",
+                demo_live_desc: "Vaqtinchalik web-kamera prototipini brauzerda sinab ko'ring.",
+                demo_go_btn: "Demo-ga o'tish",
+                demo_note: "*Faqat jamoa a'zolari yoki hakamlar uchun ruxsat etilgan bo'lishi mumkin.",
+            },
+            ru: {
+                nav_home: "Главная",
+                nav_problem: "Проблема/Решение",
+                nav_tech: "Технологии",
+                nav_team: "Команда",
+                hero_badge: "Умная биометрическая платёжная система",
+                hero_subtitle: 'Оплата в магазине <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">через распознавание лица</span>',
+                hero_desc: 'Без пластиковых карт, наличных и телефона &mdash; просто оплачивайте покупки <strong class="text-white">за 0.5 секунды</strong> своим лицом.',
+                hero_btn_try: "Попробовать прототип",
+                hero_btn_roadmap: "Дорожная карта (Roadmap)",
+                badge_oneid: "Интеграция OneID и POS",
+                badge_speed: "Проверка за 0.5 секунды",
+                badge_security: "Защита от спуфинга",
+                section_problem_title: 'Проблема и <span class="text-teal-400">Решение FacePay</span>',
+                section_problem_desc: "Как мы решаем недостатки традиционных платёжных систем с помощью биометрических технологий.",
+                problems_title: "Проблемы",
+                problem1_title: "Очереди и Медлительность",
+                problem1_desc: "Поиск карты, ввод пин-кода, ошибки терминала и длинные очереди — раздражение и потеря времени на кассах.",
+                problem2_title: "Утечка Реквизитов",
+                problem2_desc: "Через умные очки Meta Smart Glasses и скрытые камеры можно сфотографировать 16-значный номер карты и срок действия.",
+                problem3_title: "Забывчивость и Поломки",
+                problem3_desc: "Забытая дома карта, изношенный чип или разрядившийся телефон в самый нужный момент оплаты.",
+                solutions_title: "Решения FacePay",
+                solution1_title: "Оплата за 0.5 сек",
+                solution1_desc: "Моментальная оплата через обычную и недорогую камеру на кассе магазина. Транзакция выполняется за полсекунды.",
+                solution2_title: "OneID и Биометрический Hash",
+                solution2_desc: "Система не хранит фотографии! Математические векторы (hash) подтверждаются через OneID и шифруются. 100% безопасность данных.",
+                solution3_title: "Концепция без карт",
+                solution3_desc: "Без кошелька, телефона и дополнительных устройств — свобода покупок только с вашим лицом и полная автономность.",
+                tech_title: "Технологии и Механизм Работы",
+                tech_desc: "Связь современных AI и Backend технологий.",
+                tech_stack_title: "Стек Архитектуры",
+                step1_title: "Регистрация и OneID верификация",
+                step1_desc: "Пользователь регистрируется на смартфоне и подтверждает личность через OneID.",
+                step2_title: "Векторное кодирование лица",
+                step2_desc: "Изображение лица преобразуется в зашифрованные математические векторы (hash). Фото не сохраняется.",
+                step3_title: "Интеграция POS / Камеры",
+                step3_desc: "B2B SDK модуль устанавливается на устройство кассы. Поиск лица в векторной базе за 0.3 сек.",
+                step4_title: "Проверка и Оплата",
+                step4_desc: "Проверка живости (Anti-spoofing) и автоматическое списание средств с привязанной карты.",
+                roadmap_title: 'Дорожная Карта <span class="text-teal-400">(Roadmap)</span>',
+                roadmap_desc: "Наш план от идеи до крупных сетей супермаркетов.",
+                phase1_title: "Фаза 1: Идея (Завершена)",
+                status_done: "Завершено",
+                phase1_desc: "Анализ рынка, архитектура интеграции OneID и разработка концепции кибербезопасности (Zero-Knowledge / Hash).",
+                phase2_title: "Фаза 2: Прототип (В процессе)",
+                status_progress: "В процессе",
+                phase2_desc: "Модель Liveness Detection на Python/OpenCV, визуальная демонстрация через Streamlit и настройка временной векторной БД.",
+                phase3_title: "Фаза 3: MVP (Запланировано)",
+                phase3_desc: "Создание B2B SDK модуля для касс розничных сетей типа Korzinka/Makro и пилотное тестирование в реальной среде.",
+                phase4_title: "Фаза 4: Запуск и Масштабирование",
+                phase4_desc: "Полное внедрение в Payme, Click и крупные сети супермаркетов. Подключение к банковскому процессингу.",
+                team_title: 'Команда и <span class="text-teal-400">Почему мы?</span>',
+                team_desc: "Сильная экспертиза и опыт для реализации проекта.",
+                team_members_title: "Наша команда",
+                why_us_title: "Почему именно мы?",
+                why1_title: "Реальный Опыт",
+                why1_desc: "Наша команда участвовала в реальных проектах в области FinTech и искусственного интеллекта (AI/CV).",
+                why2_title: "Понимание Инфраструктуры",
+                why2_desc: "Мы полностью знаем механизмы работы с местными платёжными системами (Uzcard, Humo) и государственными сервисами (OneID).",
+                why3_title: "Комплексный Подход",
+                why3_desc: "Мы проработали не только программную часть, но и кибербезопасность, бизнес-модель (B2B SaaS) и модели розничной торговли.",
+                faq_title: 'Часто Задаваемые Вопросы <span class="text-teal-400">(FAQ)</span>',
+                faq_desc: "Подробная информация о безопасности и работе системы.",
+                faq1_q: "1. Как и где регистрируется лицо?",
+                faq1_a: '<strong>Ответ:</strong> Не на устройстве в магазине! Пользователь сканирует лицо на своём смартфоне через приложение Payme/Click или официальное приложение магазина <strong>через OneID (MyGov) один раз.</strong> Процесс проходит конфиденциально и безопасно дома.',
+                faq2_q: "2. Что даёт интеграция с OneID и MyGov?",
+                faq2_a: "<strong>Ответ:</strong> 100% подтверждение на государственном уровне, что лицо действительно принадлежит владельцу паспорта. Это полностью исключает риск незаконного привязывания чужой карты по фотографии.",
+                faq3_q: "3. Может ли кто-то снять деньги, показав моё фото или видео (Spoofing)?",
+                faq3_a: '<strong>Ответ:</strong> Нет! В системе есть строгий алгоритм <strong>Liveness Detection (проверка живости)</strong>. Он сканирует 3D глубину, моргание и микроскопическое кровообращение/естественные движения лица. Фото с экрана или маски мгновенно отклоняются.',
+                faq4_q: "4. Видны ли мои данные на устройстве/кассе в магазине?",
+                faq4_a: '<strong>Ответ:</strong> Нет, для конфиденциальности на экране кассира не отображается ни номер карты, ни имя, ни баланс. Единственная информация — зелёная отметка "Оплата успешно проведена" и чек.',
+                faq5_q: "5. Оправдала ли себя эта технология за рубежом?",
+                faq5_a: '<strong>Ответ:</strong> Да! В Китае через системы Alipay и WeChat Pay "Smile to Pay", а также в России через Сбербанк и X5 Group (Пятёрочка/Перекрёсток) ежедневно проводятся транзакции на сотни миллионов долларов через биометрические платёжные системы.',
+                faq6_q: "6. Какая выгода для магазинов и супермаркетов?",
+                faq6_a: "<strong>Ответ:</strong> За счёт сокращения времени обслуживания одного покупателя очереди на кассах уменьшаются до 50%. Это повышает пропускную способность, позволяет обслуживать больше клиентов и придаёт магазину инновационный, премиальный имидж.",
+                demo_page_title: "FacePay Прототип и Демо",
+                demo_watch_video: "Смотреть демо видео",
+                demo_what_shown: "Что показано в демо видео?",
+                demo_feature1: '<strong>Распознавание лица в реальном времени:</strong> Процесс захвата лица пользователя камерой за миллисекунды.',
+                demo_feature2: '<strong>Проверка живости:</strong> Способность отличить поддельное фото или видео с экрана телефона.',
+                demo_feature3: '<strong>Симуляция POS:</strong> Появление сообщения "Оплата принята" на экране кассы.',
+                demo_live_title: "Живой Прототип",
+                demo_live_desc: "Попробуйте временный прототип с веб-камерой в браузере.",
+                demo_go_btn: "Перейти к демо",
+                demo_note: "*Доступ может быть ограничен только для членов команды или жюри.",
+            },
+            en: {
+                nav_home: "Home",
+                nav_problem: "Problem/Solution",
+                nav_tech: "Technologies",
+                nav_team: "Team",
+                hero_badge: "Smart Biometric Checkout Engine",
+                hero_subtitle: 'Pay at the store <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">with your face</span>',
+                hero_desc: 'No plastic cards, cash, or phone &mdash; simply pay for your purchases <strong class="text-white">in 0.5 seconds</strong> with your face.',
+                hero_btn_try: "Try the prototype",
+                hero_btn_roadmap: "Roadmap",
+                badge_oneid: "OneID & POS Integration",
+                badge_speed: "0.5 second verification",
+                badge_security: "Anti-spoofing protection",
+                section_problem_title: 'Problem and <span class="text-teal-400">FacePay Solution</span>',
+                section_problem_desc: "How we solve the shortcomings of traditional payment systems using biometric technologies.",
+                problems_title: "Problems",
+                problem1_title: "Queues & Slowness",
+                problem1_desc: "Searching for cards, entering PIN codes, terminal errors and long queues cause frustration and wasted time at checkout.",
+                problem2_title: "Credential Leakage",
+                problem2_desc: "Smart glasses like Meta Smart Glasses and hidden cameras can capture 16-digit card numbers and expiration dates.",
+                problem3_title: "Forgetfulness & Damage",
+                problem3_desc: "Leaving your card at home, worn-out chip, or phone dying at the most critical payment moment.",
+                solutions_title: "FacePay Solutions",
+                solution1_title: "0.5s Ultra-fast Payment",
+                solution1_desc: "Instant payment by looking at a simple, affordable camera at the store checkout. Transaction completed in half a second.",
+                solution2_title: "OneID & Biometric Hash",
+                solution2_desc: "The system stores no photos! Mathematical vectors (hash) verified through OneID are encrypted. 100% data security guaranteed.",
+                solution3_title: "Zero-card Concept",
+                solution3_desc: "No wallet, phone, or extra devices — shop freely with just your face and enjoy complete autonomy.",
+                tech_title: "Technologies & How It Works",
+                tech_desc: "Seamless integration of modern AI and Backend technologies.",
+                tech_stack_title: "Architecture Stack",
+                step1_title: "User Opt-in & OneID Verification",
+                step1_desc: "User registers on smartphone and verifies identity through OneID.",
+                step2_title: "Face Vector Embedding",
+                step2_desc: "Face image is converted into encrypted mathematical vectors (hash). No photo is stored.",
+                step3_title: "POS / WebCam Integration",
+                step3_desc: "B2B SDK module is installed on the store checkout device. Face lookup in vector database in 0.3s.",
+                step4_title: "Liveness Check & Payment",
+                step4_desc: "Liveness check (Anti-spoofing) passes and payment is automatically deducted from linked card.",
+                roadmap_title: 'Roadmap <span class="text-teal-400">(Roadmap)</span>',
+                roadmap_desc: "Our plan from idea to major supermarket chains.",
+                phase1_title: "Phase 1: Idea (Completed)",
+                status_done: "Completed",
+                phase1_desc: "Market analysis, OneID integration architecture and cybersecurity (Zero-Knowledge / Hash) concept development.",
+                phase2_title: "Phase 2: Prototype (In Progress)",
+                status_progress: "In Progress",
+                phase2_desc: "Liveness Detection model in Python/OpenCV, visual demo via Streamlit and temporary vector database setup.",
+                phase3_title: "Phase 3: MVP (Planned)",
+                phase3_desc: "Creating B2B SDK module for retail checkout systems like Korzinka/Makro and real-world pilot testing.",
+                phase4_title: "Phase 4: Launched & Scale",
+                phase4_desc: "Full deployment in Payme, Click and major supermarket chains. Direct connection to bank processing APIs.",
+                team_title: 'Team and <span class="text-teal-400">Why Us?</span>',
+                team_desc: "Strong expertise and experience to deliver the project.",
+                team_members_title: "Our Team",
+                why_us_title: "Why Us?",
+                why1_title: "Real Experience",
+                why1_desc: "Our team has participated in real-world projects in FinTech and Artificial Intelligence (AI/CV).",
+                why2_title: "Infrastructure Knowledge",
+                why2_desc: "We fully understand how to work with local payment systems (Uzcard, Humo) and government services (OneID) APIs.",
+                why3_title: "Comprehensive Approach",
+                why3_desc: "We've defined not only the software, but also cybersecurity, business model (B2B SaaS) and retail models.",
+                faq_title: 'Frequently Asked Questions <span class="text-teal-400">(FAQ)</span>',
+                faq_desc: "Detailed information about system security and operation.",
+                faq1_q: "1. How and where is the face registered?",
+                faq1_a: '<strong>Answer:</strong> Not on the store device! The user scans their face on their personal smartphone through Payme/Click or the store\'s official app <strong>via OneID (MyGov) just once.</strong> The process is completely private and secure at home.',
+                faq2_q: "2. What does OneID and MyGov integration provide?",
+                faq2_a: "<strong>Answer:</strong> 100% government-level confirmation that the face truly belongs to the passport holder. This completely eliminates the risk of illegally linking someone else's card using a photo.",
+                faq3_q: "3. Can someone withdraw money by showing my photo or video (Spoofing)?",
+                faq3_a: '<strong>Answer:</strong> No! The system has a strict <strong>Liveness Detection algorithm</strong>. It scans 3D depth, blinking, and microscopic blood circulation/natural facial movements. Photos from phone screens or masks are instantly rejected.',
+                faq4_q: "4. Are my details visible on the store device/checkout?",
+                faq4_a: '<strong>Answer:</strong> No, for privacy, the cashier screen shows neither your card number, name, nor balance. The only information is a green "Payment successful" indicator and the receipt.',
+                faq5_q: "5. Has this technology proven itself abroad?",
+                faq5_a: '<strong>Answer:</strong> Yes! In China through Alipay and WeChat Pay "Smile to Pay" systems, and in Russia through Sberbank and X5 Group (Pyaterochka/Perekrestok), hundreds of millions of dollars in transactions are processed daily through biometric payment systems.',
+                faq6_q: "6. What's the benefit for stores and supermarkets?",
+                faq6_a: "<strong>Answer:</strong> By reducing service time per customer, checkout queues decrease by up to 50%. This increases throughput, allows serving more customers, and gives the store an innovative, premium image.",
+                demo_page_title: "FacePay Prototype & Demo",
+                demo_watch_video: "Watch demo video",
+                demo_what_shown: "What's shown in the demo video?",
+                demo_feature1: '<strong>Real-time Face Detection:</strong> The process of capturing the user\'s face via camera in milliseconds.',
+                demo_feature2: '<strong>Liveness Check:</strong> Ability to distinguish fake photos or videos shown from a phone screen.',
+                demo_feature3: '<strong>POS Simulation:</strong> Display of "Payment Accepted" message on the store checkout screen.',
+                demo_live_title: "Live Prototype",
+                demo_live_desc: "Try the temporary webcam prototype in your browser.",
+                demo_go_btn: "Go to Demo",
+                demo_note: "*Access may be restricted to team members or judges only.",
+            }
+        };
+
+        let currentLang = localStorage.getItem('facepay-lang') || 'uz';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('facepay-lang', lang);
+            applyTranslations();
+            // Update active btn
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active-lang');
+                if (btn.textContent.trim().toLowerCase() === lang || 
+                    (lang === 'ru' && btn.textContent.trim() === 'RU') ||
+                    (lang === 'uz' && btn.textContent.trim() === 'UZ') ||
+                    (lang === 'en' && btn.textContent.trim() === 'EN')) {
+                    btn.classList.add('active-lang');
+                }
+            });
+        }
+
+        function applyTranslations() {
+            const t = translations[currentLang];
+            if (!t) return;
+
+            // data-i18n (text only)
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key] !== undefined) el.textContent = t[key];
+            });
+            // data-i18n-html (inner HTML)
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (t[key] !== undefined) el.innerHTML = t[key];
+            });
+        }
+
+        // ==================== THEME TOGGLE ====================
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('facepay-theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('facepay-theme', 'dark');
+            }
+        }
+
+        // Restore theme on load
+        (function() {
+            const savedTheme = localStorage.getItem('facepay-theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
         // Initialize Lucide Icons
         lucide.createIcons();
 
@@ -702,7 +1190,8 @@
             item.classList.toggle('active');
         }
 
-
+        // Apply saved language on load
+        setLang(currentLang);
     </script>
 </body>
 </html>
